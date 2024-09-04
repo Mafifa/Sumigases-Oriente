@@ -134,8 +134,8 @@ export default function LandingPage () {
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center text-blue-800 mb-16">Sobre Nosotros</h2>
           <div className="flex flex-col lg:flex-row items-center justify-between">
-            <div className="lg:w-1/2 mb-12 lg:mb-0">
-              <img src="/placeholder.svg?height=400&width=600" alt="SumiGases Oriente Team" className="rounded-lg shadow-2xl" />
+            <div className="self-center lg:w-1/2 mb-12 md:mb-0 md:-mr-24 lg:mb-0">
+              <img src="/images.png" alt="SumiGases Oriente Team" className="rounded-lg shadow-2xl" />
             </div>
             <div className="lg:w-1/2 lg:pl-16">
               <div className="bg-white rounded-lg shadow-xl p-8">
