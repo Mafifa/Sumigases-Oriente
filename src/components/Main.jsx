@@ -1,285 +1,260 @@
-import React, { useState, useEffect } from 'react';
-import { Ship, Star, MapPin, Clock, ChevronRight } from "lucide-react";
-
-const Button = ({ children, className, ...props }) => (
-  <button
-    className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background ${className}`}
-    {...props}
-  >
-    {children}
-  </button>
-);
-
-const Card = ({ children, className, ...props }) => (
-  <div
-    className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}
-    {...props}
-  >
-    {children}
-  </div>
-);
-
-const CardContent = ({ children, className, ...props }) => (
-  <div className={`p-6 pt-0 ${className}`} {...props}>
-    {children}
-  </div>
-);
-
-const Carousel = ({ children }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [slidesToShow, setSlidesToShow] = useState({
-    slide: 1,
-    move: 60
-  });
-
-  useEffect(() => {
-    const updateSlidesToShow = () => {
-      const width = window.innerWidth;
-      if (width > 1000) {
-        setSlidesToShow({ slide: 3, move: 60 });
-      } else if (width > 700) {
-        setSlidesToShow({ slide: 2, move: 40 });
-      } else {
-        setSlidesToShow({ slide: 1, move: 20 });
-      }
-    };
-
-    updateSlidesToShow(); // Ejecutar la primera vez
-    window.addEventListener("resize", updateSlidesToShow); // Añadir el listener para cambios de tamaño
-
-    return () => {
-      window.removeEventListener("resize", updateSlidesToShow); // Limpiar el listener
-    };
-  }, []);
-
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === React.Children.count(children) - slidesToShow.slide
-        ? 0
-        : prevIndex + 1
-    );
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0
-        ? React.Children.count(children) - slidesToShow.slide
-        : prevIndex - 1
-    );
-  };
-
-  return (
-    <div className="relative w-full overflow-hidden">
-      <div
-        className="flex transition-transform duration-300 ease-in-out"
-        style={{
-          transform: `translateX(-${(currentIndex * slidesToShow.move) / slidesToShow.slide}%)`,
-          width: `${(100 * React.Children.count(children)) / slidesToShow.slide}%`,
-        }}
-      >
-        {React.Children.map(children, (child) => (
-          <div
-            className="flex justify-center items-center"
-            style={{ width: `${100 / slidesToShow.slide}%` }}
-          >
-            <div className="w-full h-full flex justify-center items-center">
-              {child}
-            </div>
-          </div>
-        ))}
-      </div>
-      <button
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-full p-2"
-        onClick={prevSlide}
-      >
-        <ChevronRight
-          size={24}
-          style={{ transform: "rotate(180deg)" }} // Rotar la flecha hacia la izquierda
-        />
-      </button>
-      <button
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-full p-2"
-        onClick={nextSlide}
-      >
-        <ChevronRight size={24} />
-      </button>
-    </div>
-  );
-};
-
-const CarouselItem = ({ children }) => (
-  <div className="w-full p-3">{children}</div>
-);
+import { useState, useEffect } from 'react'
+import { MapPin, Phone, Mail, ChevronUp, Droplet, Wind, Truck, Star, Zap, Tornado, Shield, Flag, Menu, X } from 'lucide-react'
 
 export default function LandingPage () {
-  return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <header className="px-4 lg:px-6 h-16 flex items-center bg-white border-b border-gray-200">
-        <a href="/" className="flex items-center justify-center">
-          <Ship className="h-6 w-6 text-blue-600" />
-          <span className="ml-2 text-2xl font-bold text-gray-900">El Navegante</span>
-        </a>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <a className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors" href="/">
-            Inicio
-          </a>
-          <a className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors" href="/menu">
-            Menú
-          </a>
-          <a className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors" href="/pedido">
-            Hacer Pedido
-          </a>
-        </nav>
-      </header>
-      <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-[url('/principal.jpg')] bg-cover bg-center">
-          <div className="container px-4 md:px-6 mx-auto">
-            <div className="flex flex-col items-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-white drop-shadow-lg">
-                  Bienvenido a El Navegante
-                </h1>
-                <p className="mx-auto max-w-[700px] text-white text-xl md:text-2xl drop-shadow-lg">
-                  Descubre una experiencia culinaria única con los mejores sabores del mar y la tierra.
-                </p>
-              </div>
-              <div className="space-x-4">
-                <a href="/menu">
-                  <Button className="bg-blue-600 text-white hover:bg-blue-700 shadow-lg transition-all duration-200 px-6 py-3">
-                    Ver Menú
-                  </Button>
-                </a>
-                <a href="/pedido">
-                  <Button className="bg-white text-blue-600 hover:bg-gray-100 shadow-lg transition-all duration-200 px-6 py-3">
-                    Hacer Pedido
-                  </Button>
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-white">
-          <div className="container px-4 md:px-6 mx-auto">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 text-gray-900">Nuestra Experiencia</h2>
-            <div className="grid gap-8 lg:grid-cols-3 lg:gap-12">
-              <Card className="bg-gray-50 hover:shadow-md transition-shadow duration-200">
-                <CardContent className="flex flex-col items-center space-y-4 p-6">
-                  <Star className="w-12 h-12 text-yellow-500" />
-                  <h3 className="text-xl font-bold text-gray-900">Gastronomía Excepcional</h3>
-                  <p className="text-center text-gray-700">Nuestros chefs expertos crean platos innovadores utilizando los ingredientes más frescos y de la más alta calidad.</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-gray-50 hover:shadow-md transition-shadow duration-200">
-                <CardContent className="flex flex-col items-center space-y-4 p-6">
-                  <MapPin className="w-12 h-12 text-red-500" />
-                  <h3 className="text-xl font-bold text-gray-900">Ubicación Privilegiada</h3>
-                  <p className="text-center text-gray-700">Disfruta de vistas panorámicas al océano mientras saboreas nuestros exquisitos platos en un ambiente acogedor y elegante.</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-gray-50 hover:shadow-md transition-shadow duration-200">
-                <CardContent className="flex flex-col items-center space-y-4 p-6">
-                  <Clock className="w-12 h-12 text-blue-500" />
-                  <h3 className="text-xl font-bold text-gray-900">Servicio Impecable</h3>
-                  <p className="text-center text-gray-700">Nuestro equipo dedicado se asegura de que cada visita sea memorable, brindándote una atención personalizada y eficiente.</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-blue-600 text-white">
-          <div className="container px-4 md:px-6 mx-auto">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">Plato del Día</h2>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-              <img
-                src="/paella.jpg"
-                alt="Paella Marinera"
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
-                className="rounded-lg md:max-w-[420px] max-w-96 shadow-xl"
-              />
-              <div className="max-w-md">
-                <h3 className="text-2xl font-bold mb-4">Caribe Oriental</h3>
-                <p className="mb-6 text-lg">Nuestro Caribe Oriental te transporta a las islas con cada bocado. La arepa, esponjosa y cálida, se convierte en el lienzo perfecto para un fresco ceviche de pescado. Toques de cebolla morada, tomate y aguacate, junto a limones frescos, evocan los sabores del mar Caribe.</p>
-                <Button className="bg-white text-blue-600 hover:bg-gray-100 transition-colors duration-200 px-6 py-3 text-lg font-semibold">
-                  Ordenar Ahora
-                </Button>
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  const closeMenu = () => {
+    setIsMenuOpen(false)
+  }
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.pageYOffset > 300)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  return (
+    <div className="bg-white min-h-screen font-sans">
+      {/* Header */}
+      <header className="bg-blue-600 text-white sticky top-0 z-50">
+        <nav className="container mx-auto px-6 py-3">
+          <div className="flex justify-between items-center">
+            <a href="#" className="text-2xl font-bold">SumiGases Oriente</a>
+            <div className="hidden md:flex space-x-4">
+              <a href="#inicio" className="hover:text-blue-200">Inicio</a>
+              <a href="#servicios" className="hover:text-blue-200">Servicios</a>
+              <a href="#productos" className="hover:text-blue-200">Productos</a>
+              <a href="#equipos" className="hover:text-blue-200">Equipos</a>
+              <a href="#nosotros" className="hover:text-blue-200">Nosotros</a>
+              <a href="#contacto" className="hover:text-blue-200">Contacto</a>
+            </div>
+            <button
+              className="md:hidden text-white focus:outline-none"
+              onClick={toggleMenu}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </nav>
+        {/* Mobile menu */}
+        <div
+          className={`fixed inset-0 bg-blue-600 bg-opacity-95 z-50 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            } transition-transform duration-300 ease-in-out`}
+        >
+          <div className="flex justify-end p-4">
+            <button
+              className="text-white"
+              onClick={toggleMenu}
+              aria-label="Cerrar menú"
+            >
+              <X size={24} />
+            </button>
+          </div>
+          <div className="flex flex-col items-center justify-center h-full space-y-8">
+            <a href="#inicio" className="text-white text-2xl" onClick={closeMenu}>Inicio</a>
+            <a href="#servicios" className="text-white text-2xl" onClick={closeMenu}>Servicios</a>
+            <a href="#productos" className="text-white text-2xl" onClick={closeMenu}>Productos</a>
+            <a href="#equipos" className="text-white text-2xl" onClick={closeMenu}>Equipos</a>
+            <a href="#nosotros" className="text-white text-2xl" onClick={closeMenu}>Nosotros</a>
+            <a href="#contacto" className="text-white text-2xl" onClick={closeMenu}>Contacto</a>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section id="inicio" className="bg-blue-700 text-white py-20">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-5xl font-bold mb-4">SumiGases Oriente</h1>
+          <p className="text-xl mb-8">Su proveedor confiable de gases industriales, productos de soldadura y equipos industriales en Venezuela por más de 20 años</p>
+          <a href="#contacto" className="bg-white text-blue-700 py-2 px-6 rounded-full text-lg font-semibold hover:bg-blue-100 transition duration-300">Contáctenos</a>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="servicios" className="py-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-blue-800 mb-12">Nuestros Servicios</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <ServiceCard icon={<Droplet size={40} />} title="Gases Líquidos" description="Suministro de gases en estado líquido para diversas aplicaciones industriales." />
+            <ServiceCard icon={<Wind size={40} />} title="Gases Comprimidos" description="Variedad de gases comprimidos para satisfacer sus necesidades específicas." />
+            <ServiceCard icon={<Flag size={40} />} title="Mezclas Especiales" description="Creación de mezclas de gases personalizadas según sus requerimientos." />
+            <ServiceCard icon={<Truck size={40} />} title="Distribución" description="Entrega puntual y segura de gases industriales en toda la región." />
+          </div>
+        </div>
+      </section>
+
+      {/* Products Section */}
+      <section id="productos" className="bg-blue-50 py-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-blue-800 mb-12">Productos de Soldadura</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <ProductCard icon={<Zap size={40} />} title="Electrodos" description="Amplia gama de electrodos para diferentes tipos de soldadura." />
+            <ProductCard icon={<Tornado size={40} />} title="Máquinas de Soldar" description="Equipos de soldadura de alta calidad para profesionales." />
+            <ProductCard icon={<Shield size={40} />} title="Equipos de Protección" description="Elementos de seguridad para soldadores y personal industrial." />
+          </div>
+        </div>
+      </section>
+
+      {/* Equipment Section */}
+      <section id="equipos" className="py-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-blue-800 mb-12">Equipos Industriales</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <EquipmentCard title="Compresores" description="Compresores de aire de alta eficiencia para aplicaciones industriales." />
+            <EquipmentCard title="Generadores" description="Generadores eléctricos confiables para respaldo y uso continuo." />
+            <EquipmentCard title="Bombas Industriales" description="Bombas de alta calidad para diversos fluidos y aplicaciones." />
+          </div>
+        </div>
+      </section>
+
+      {/* About Us Section */}
+      <section id="nosotros" className="py-20 bg-gradient-to-b from-blue-100 to-white">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center text-blue-800 mb-16">Sobre Nosotros</h2>
+          <div className="flex flex-col lg:flex-row items-center justify-between">
+            <div className="lg:w-1/2 mb-12 lg:mb-0">
+              <img src="/placeholder.svg?height=400&width=600" alt="SumiGases Oriente Team" className="rounded-lg shadow-2xl" />
+            </div>
+            <div className="lg:w-1/2 lg:pl-16">
+              <div className="bg-white rounded-lg shadow-xl p-8">
+                <p className="text-lg text-blue-800 mb-6 leading-relaxed">
+                  Con más de <span className="font-bold text-blue-600">20 años de experiencia</span>, SumiGases Oriente se ha consolidado como líder en el suministro de gases industriales, productos de soldadura y equipos industriales en Venezuela. Nuestro compromiso con la calidad y el servicio al cliente nos ha permitido crecer y expandir nuestra gama de productos y servicios a lo largo de los años.
+                </p>
+                <p className="text-lg text-blue-800 mb-8 leading-relaxed">
+                  Nuestra misión es ser el <span className="font-bold text-blue-600">socio confiable</span> que impulsa el progreso industrial en la región, ofreciendo soluciones integrales que abarcan desde gases industriales hasta equipos especializados, siempre con un servicio personalizado que supera las expectativas.
+                </p>
+                <div className="flex items-center bg-blue-50 p-4 rounded-lg">
+                  <div className="flex mr-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="text-yellow-400 w-6 h-6" />
+                    ))}
+                  </div>
+                  <span className="text-blue-800 font-semibold">4.9/5 basado en 500+ reseñas en 20 años de servicio</span>
+                </div>
               </div>
             </div>
           </div>
-        </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
-          <div className="container px-4 md:px-6 mx-auto">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 text-gray-900">Nuestra Galería</h2>
-            <Carousel>
-              {[...Array(5)].map((_, index) => (
-                <CarouselItem key={index}>
-                  <img
-                    src={`/platos/${index + 1}.jpg`}
-                    alt={`El Navegante - Imagen ${index + 1}`}
-                    className="rounded-lg shadow-lg mx-auto object-center w-full h-64 md:h-80 lg:h-96"
-                  />
-                </CarouselItem>
-              ))}
-            </Carousel>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section id="ubicacion" className="py-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-blue-800 mb-12">Nuestra Ubicación</h2>
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62909.44448206182!2d-64.66216146348083!3d10.208494475587616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c2d75103f2ba7f7%3A0x1fb2622aa9a7f1df!2sLecher%C3%ADa%2C%20Anzo%C3%A1tegui!5e0!3m2!1ses!2sve!4v1684964174991!5m2!1ses!2sve"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
           </div>
-        </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-white">
-          <div className="container px-4 md:px-6 mx-auto">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 text-gray-900">Reserva una Mesa</h2>
-            <div className="max-w-lg mx-auto shadow-lg">
-              <Card>
-                <CardContent className="p-6">
-                  <form className="space-y-4 py-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
-                      <input type="text" id="name" className="p-1 mt-1 block w-full rounded-md border-gray-300 text-xl border border-solid shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                    </div>
-                    <div>
-                      <label htmlFor="date" className="block text-sm font-medium text-gray-700">Fecha</label>
-                      <input type="date" id="date" className="p-1 mt-1 block w-full rounded-md border-gray-300 text-xl border border-solid shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                    </div>
-                    <div>
-                      <label htmlFor="time" className="block text-sm font-medium text-gray-700">Hora</label>
-                      <input type="time" id="time" className="p-1 mt-1 block w-full rounded-md border-gray-300 text-xl border border-solid shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                    </div>
-                    <div>
-                      <label htmlFor="guests" className="block text-sm font-medium text-gray-700">Número de Personas</label>
-                      <input type="number" id="guests" min="1" className="p-1 mt-1 block w-full rounded-md border-gray-300 text-xl border border-solid shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                    </div>
-                    <Button className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 py-2 text-lg font-semibold">
-                      Reservar
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contacto" className="bg-blue-600 text-white py-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">Contáctenos</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div>
+              <form className="space-y-6">
+                <input type="text" placeholder="Nombre" className="w-full px-4 py-2 rounded-lg text-blue-800" />
+                <input type="email" placeholder="Correo Electrónico" className="w-full px-4 py-2 rounded-lg text-blue-800" />
+                <textarea placeholder="Mensaje" rows={4} className="w-full px-4 py-2 rounded-lg text-blue-800"></textarea>
+                <button type="submit" className="bg-white text-blue-600 py-2 px-6 rounded-lg font-semibold hover:bg-blue-100 transition duration-300">Enviar Mensaje</button>
+              </form>
+            </div>
+            <div className="space-y-6">
+              <ContactInfo icon={<MapPin />} text="Lechería, Anzoátegui, Venezuela" />
+              <ContactInfo icon={<Phone />} text="+58 123-456-7890" />
+              <ContactInfo icon={<Mail />} text="info@sumigasesoriente.com" />
             </div>
           </div>
-        </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-900 text-white">
-          <div className="container px-4 md:px-6 mx-auto">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">Lo que dicen nuestros clientes</h2>
-            <div className="grid gap-8 lg:grid-cols-3 lg:gap-12">
-              <Card className="bg-gray-800">
-                <CardContent className="p-6">
-                  <p className="text-gray-300 mb-4 italic">"Una experiencia culinaria inolvidable. Los sabores son exquisitos y el servicio es impecable. Sin duda, el mejor restaurante de mariscos que he visitado."</p>
-                  <p className="font-semibold text-blue-400">- María González</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-gray-800">
-                <CardContent className="p-6">
-                  <p className="text-gray-300 mb-4 italic">"El ambiente es acogedor y elegante, perfecto para una cena romántica. La paella marinera es simplemente espectacular. Volveré pronto."</p>
-                  <p className="font-semibold text-blue-400">- Juan Pérez</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-gray-800">
-                <CardContent className="p-6">
-                  <p className="text-gray-300 mb-4 italic">"Cada plato es una obra de arte.  La frescura de los ingredientes y la creatividad del chef hacen que cada visita sea una nueva aventura para el paladar."</p>
-                  <p className="font-semibold text-blue-400">- Ana López</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-      </main>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-blue-800 text-white py-8">
+        <div className="container mx-auto px-6 text-center">
+          <p>&copy; 2023 SumiGases Oriente. Más de 20 años sirviendo a la industria venezolana. Todos los derechos reservados.</p>
+        </div>
+      </footer>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition duration-300"
+          aria-label="Volver arriba"
+        >
+          <ChevronUp size={24} />
+        </button>
+      )}
+    </div>
+  )
+}
+
+function ServiceCard ({ icon, title, description }) {
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition duration-300">
+      <div className="text-blue-600 mb-4">{icon}</div>
+      <h3 className="text-xl font-semibold text-blue-800 mb-2">{title}</h3>
+      <p className="text-blue-600">{description}</p>
+    </div>
+  )
+}
+
+function ProductCard ({ icon, title, description }) {
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition duration-300">
+      <div className="text-blue-600 mb-4">{icon}</div>
+      <h3 className="text-xl font-semibold text-blue-800 mb-2">{title}</h3>
+      <p className="text-blue-600">{description}</p>
+    </div>
+  )
+}
+
+function EquipmentCard ({ title, description }) {
+  return (
+    <div className="bg-white rounde
+d-lg shadow-lg p-6 text-center hover:shadow-xl transition duration-300">
+      <h3 className="text-xl font-semibold text-blue-800 mb-2">{title}</h3>
+      <p className="text-blue-600">{description}</p>
+    </div>
+  )
+}
+
+function ContactInfo ({ icon, text }) {
+  return (
+    <div className="flex items-center">
+      <div className="mr-4">{icon}</div>
+      <p>{text}</p>
     </div>
   )
 }
